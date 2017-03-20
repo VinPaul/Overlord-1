@@ -1,0 +1,10 @@
+[Unit]
+Description=pushgateway
+
+[Service]
+Type=forking
+ExecStart=start-stop-daemon --start --background --chuid vagrant --make-pidfile --pidfile /var/run/pushgateway.pid --exec '/home/vagrant/pushgateway/pushgateway'
+PIDFile=/var/run/pushgateway.pid
+
+[Install]
+WantedBy=multi-user.target

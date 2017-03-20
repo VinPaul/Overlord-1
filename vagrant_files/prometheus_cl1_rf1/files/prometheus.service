@@ -1,0 +1,10 @@
+[Unit]
+Description=prometheus
+
+[Service]
+Type=forking
+ExecStart=start-stop-daemon --start --background --chuid vagrant --make-pidfile --pidfile /var/run/prometheus.pid --exec '/home/vagrant/prometheus/prometheus' -- -config.file=/home/vagrant/prometheus/prometheus.yml -storage.local.path=/home/vagrant/prometheus/data
+PIDFile=/var/run/prometheus.pid
+
+[Install]
+WantedBy=multi-user.target

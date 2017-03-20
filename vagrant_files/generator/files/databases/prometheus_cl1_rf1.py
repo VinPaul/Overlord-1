@@ -44,34 +44,30 @@ __version__ = "0.01"
 
 def getDict():
     dbConfig={}
-    dbConfig["db_folders"]=["/home/vagrant/hbase"]
-    dbConfig["db_client"]="opentsdb"
-    dbConfig["db_args"]="-p ip=%%IP%% -p port=4242"
-    dbConfig["db_name"]="opentsdb_cl1_rf1"
-    dbConfig["db_desc"]="OpenTSDB with HBase and Hadoop together on 1 VM."
+    dbConfig["db_folders"]=["/home/vagrant/prometheus"]
+    dbConfig["db_client"]="prometheus"
+    dbConfig["db_args"]="-p ip_prometheus=%%IP0%% -p ip_pushgateway=%%IP0%% -p port_prometheus=9090 -p port_pushgateway=9091 -p replicants=1"
+    dbConfig["db_name"]="prometheus_cl1_rf1"
+    dbConfig["db_desc"]="Prometheus and Pushgateway on 1 VM."
     dbConfig["jvm_args"]="-jvm-args='-Xmx4096m'"
     dbConfig["prerun_once"]= []
     dbConfig["postrun_once"]= []
-    dbConfig["prerun"]= [ "%%SSH%%sudo -s bash -c 'echo -e \"%%IP0%% vm0\" >> /etc/hosts'"]
+    dbConfig["prerun"]= ["%%SSH%%sudo -s bash -c 'echo -e \"%%IP0%% vm0\" >> /etc/hosts'",
+                         "%%SSH%%sudo -s bash -c 'sleep 10'",
+                         "%%SSH%%sudo -s bash -c 'sed -i \"s|localhost|%%IP0%%|g\" /home/vagrant/prometheus/prometheus.yml'"]
     dbConfig["postrun"]= []
     dbConfig["prerun_master"]= []
-    dbConfig["postrun_master"]= []
+    dbConfig["postrun_master"]= ["%%SSH%%sudo -s bash -c 'systemctl start prometheus.service'",
+                                 "%%SSH%%sudo -s bash -c 'sleep 10'",
+                                 "%%SSH%%sudo -s bash -c 'systemctl start pushgateway.service'"]
     dbConfig["prerun_slaves"]= []
     dbConfig["postrun_slaves"]= []
-    dbConfig["prerun_dict"]= {
-        0 : ["%%SSH%%sudo -s bash /home/vagrant/hbase/bin/start-hbase.sh",
-             "%%SSH%%sudo -s bash -c 'sleep 10'",
-             "%%SSH%%sudo -s bash -c \"COMPRESSION=LZO HBASE_HOME=/home/vagrant/hbase /usr/share/opentsdb/tools/create_table.sh\"",
-             "%%SSH%%sudo -s bash -c 'systemctl start opentsdb.service'",
-             "%%SSH%%sudo -s bash -c '/usr/share/opentsdb/bin/tsdb mkmetric usermetric'"
-             ],
-    }
+    dbConfig["prerun_dict"]= {}
     dbConfig["postrun_dict"]= {}
-    dbConfig["check"]= ["%%SSH%%sudo -s bash -c 'exit $(systemctl status opentsdb.service | grep -c \"active (exited)\")'",
-                        "%%SSH%%sudo -s bash -c 'exit $(($(systemctl status opentsdb.service | grep -c \"active (running)\")-1))'",
-                        "%%SSH%%sudo -s bash -c 'exit $(($(ps ax | grep \"hbase\" | grep -v \"grep hbase\" | wc -l)-3))'",
-                        "%%SSH%%sudo -s bash -c 'exit $(($(ps ax | grep \"hadoop\" | grep -v \"grep hadoop\" | wc -l)-1))'"]
+    dbConfig["check"]= ["%%SSH%%sudo -s bash -c 'exit $(($(systemctl status prometheus.service | grep -c \"inactive (dead)\")-1))'",
+                        "%%SSH%%sudo -s bash -c 'exit $(($(systemctl status pushgateway.service | grep -c \"inactive (dead)\")-1))'"]
     dbConfig["check_master"]= []
+
     dbConfig["check_slaves"]= []
     dbConfig["check_dict"]= {}
     dbConfig["basic"]= False
