@@ -60,8 +60,8 @@ def getDict():
     dbConfig["postrun_slaves"]= []
     dbConfig["prerun_dict"]= {
         0 : ["%%SSH%%sudo -s bash -c 'sed -i \"s|localhost|%%IP0%%|g\" /home/vagrant/prometheus/prometheus.yml'",
-             "%%SSH%%sudo -s bash -c 'systemctl start pushgateway.service'"
-             "%%SSH%%sudo -s bash -c 'systemctl start prometheus.service'"             
+             "%%SSH%%sudo -s bash -c 'systemctl start pushgateway.service'",
+             "%%SSH%%sudo -s bash -c 'systemctl start prometheus.service'"
              ],
     }
     dbConfig["postrun_dict"]= {}
