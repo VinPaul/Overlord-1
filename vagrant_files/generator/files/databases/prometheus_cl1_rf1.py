@@ -67,7 +67,7 @@ def getDict():
     dbConfig["postrun_dict"]= {}
     dbConfig["check"]= []
     dbConfig["check_master"]= ["%%SSH%%sudo -s bash -c 'exit $(systemctl status pushgateway.service | grep -c \"active (exited)\")'",
-                               "%%SSH%%sudo -s bash -c 'exit $(($(systemctl status pushgateway.service | grep -c \"active (running)\")-1))'"
+                               "%%SSH%%sudo -s bash -c 'exit $(($(systemctl status pushgateway.service | grep -c \"active (running)\")-1))'",
                                "%%SSH%%sudo -s bash -c 'exit $(systemctl status prometheus.service | grep -c \"active (exited)\")'",
                                "%%SSH%%sudo -s bash -c 'exit $(($(systemctl status prometheus.service | grep -c \"active (running)\")-1))'",
                         ]
