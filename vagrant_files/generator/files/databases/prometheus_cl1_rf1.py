@@ -52,21 +52,25 @@ def getDict():
     dbConfig["jvm_args"]="-jvm-args='-Xmx4096m'"
     dbConfig["prerun_once"]= []
     dbConfig["postrun_once"]= []
-    dbConfig["prerun"]= ["%%SSH%%sudo -s bash -c 'echo -e \"%%IP0%% vm0\" >> /etc/hosts'",
-                         "%%SSH%%sudo -s bash -c 'sleep 10'",
-                         "%%SSH%%sudo -s bash -c 'sed -i \"s|localhost|%%IP0%%|g\" /home/vagrant/prometheus/prometheus.yml'"]
+    dbConfig["prerun"]= ["%%SSH%%sudo -s bash -c 'echo -e \"%%IP0%% vm0\" >> /etc/hosts'"]
     dbConfig["postrun"]= []
     dbConfig["prerun_master"]= []
-    dbConfig["postrun_master"]= ["%%SSH%%sudo -s bash -c 'systemctl start prometheus.service'",
-                                 "%%SSH%%sudo -s bash -c 'sleep 10'",
-                                 "%%SSH%%sudo -s bash -c 'systemctl start pushgateway.service'"]
+    dbConfig["postrun_master"]= []
     dbConfig["prerun_slaves"]= []
     dbConfig["postrun_slaves"]= []
-    dbConfig["prerun_dict"]= {}
+    dbConfig["prerun_dict"]= {
+        0 : ["%%SSH%%sudo -s bash -c 'sed -i \"s|localhost|%%IP0%%|g\" /home/vagrant/prometheus/prometheus.yml'",
+             "%%SSH%%sudo -s bash -c 'systemctl start pushgateway.service'"
+             "%%SSH%%sudo -s bash -c 'systemctl start prometheus.service'"             
+             ],
+    }
     dbConfig["postrun_dict"]= {}
-    dbConfig["check"]= ["%%SSH%%sudo -s bash -c 'exit $(($(systemctl status prometheus.service | grep -c \"inactive (dead)\")-1))'",
-                        "%%SSH%%sudo -s bash -c 'exit $(($(systemctl status pushgateway.service | grep -c \"inactive (dead)\")-1))'"]
-    dbConfig["check_master"]= []
+    dbConfig["check"]= []
+    dbConfig["check_master"]= ["%%SSH%%sudo -s bash -c 'exit $(systemctl status pushgateway.service | grep -c \"active (exited)\")'",
+                               "%%SSH%%sudo -s bash -c 'exit $(($(systemctl status pushgateway.service | grep -c \"active (running)\")-1))'"
+                               "%%SSH%%sudo -s bash -c 'exit $(systemctl status prometheus.service | grep -c \"active (exited)\")'",
+                               "%%SSH%%sudo -s bash -c 'exit $(($(systemctl status prometheus.service | grep -c \"active (running)\")-1))'",
+                        ]
 
     dbConfig["check_slaves"]= []
     dbConfig["check_dict"]= {}
