@@ -2,7 +2,7 @@
 Description=Prometheus
 
 [Service]
-ExecStart=/home/vagrant/prometheus/prometheus -config.file="/home/vagrant/prometheus/prometheus.yml" -storage.local.path="/home/vagrant/prometheus/data"
+ExecStart=/home/vagrant/prometheus/prometheus -config.file=/home/vagrant/prometheus/prometheus.yml -storage.local.path=/home/vagrant/prometheus/data
 
 [Install]
 WantedBy=multi-user.target
