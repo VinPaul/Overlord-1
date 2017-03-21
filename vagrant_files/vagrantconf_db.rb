@@ -1,9 +1,9 @@
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provider :vsphere do |vsphere, override|
-    vsphere.template_name  = 'nemar/baderas/BaseDB-VM-Vorlage'
+    vsphere.template_name  = ''
   end
   config.vm.provider :openstack do |openstack, override|
-    openstack.flavor             = 'm1.larger'
+    openstack.flavor             = ''
   end
   config.vm.provider :virtualbox do |virtualbox, override|
     virtualbox.customize ["modifyvm", :id, "--memory", "1024"]   
