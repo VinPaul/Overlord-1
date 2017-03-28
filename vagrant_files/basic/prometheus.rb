@@ -1,7 +1,7 @@
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Installing prometheus
-  config.vm.provision "shell", privileged: false, inline: "wget -t 10 -O /home/vagrant/prometheus.tar.gz --retry-connrefused -nv https://github.com/prometheus/prometheus/releases/download/v1.5.0/prometheus-1.5.0.linux-amd64.tar.gz"
-  config.vm.provision "shell", privileged: false, inline: "wget -t 10 -O /home/vagrant/pushgateway.tar.gz --retry-connrefused -nv https://github.com/prometheus/pushgateway/releases/download/v0.3.1/pushgateway-0.3.1.linux-amd64.tar.gz"
+  config.vm.provision "shell", privileged: false, inline: "wget -t 10 -O /home/vagrant/prometheus.tar.gz --retry-connrefused -nv \"#{$links_prometheus}\""
+  config.vm.provision "shell", privileged: false, inline: "wget -t 10 -O /home/vagrant/pushgateway.tar.gz --retry-connrefused -nv \"#{$links_pushgateway}\""
   config.vm.provision "shell", privileged: false,  inline: "tar -C /home/vagrant -xvzf /home/vagrant/prometheus.tar.gz"
   config.vm.provision "shell", privileged: false,  inline: "tar -C /home/vagrant -xvzf /home/vagrant/pushgateway.tar.gz"
   config.vm.provision "shell", privileged: false,  inline: "rm /home/vagrant/prometheus.tar.gz"
